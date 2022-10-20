@@ -15,9 +15,11 @@ type cases = [
 
 // ============= Your Code Here =============
 type TupleToNestedObject<T, U> = T extends [infer FirstItem, ...infer RestItems]
-  ? FirstItem extends string | number
+  ? FirstItem extends string | number | symbol
     ? {
         [key in FirstItem]: TupleToNestedObject<RestItems, U>;
       }
     : never
   : U;
+
+type a = TupleToNestedObject<["a", "b"], number>;
