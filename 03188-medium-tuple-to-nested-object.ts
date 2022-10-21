@@ -22,4 +22,4 @@ type TupleToNestedObject<T, U> = T extends [infer FirstItem, ...infer RestItems]
     : never
   : U;
 
-type a = TupleToNestedObject<["a", "b"], number>;
+type a = TupleToNestedObject<["a", "b", "c"], number>;

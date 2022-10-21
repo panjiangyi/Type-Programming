@@ -55,8 +55,8 @@ interface TreeNode {
   left: TreeNode | null;
   right: TreeNode | null;
 }
-type InorderTraversal<
-  T extends TreeNode | null,
-  R extends TreeNode["val"][] = []
-> = [T["left"] extends TreeNode,]
-type a = InorderTraversal<typeof tree1>;
+type InorderTraversal<T extends TreeNode | null> = [T] extends [TreeNode]
+  ? [...InorderTraversal<T["left"]>, T["val"], ...InorderTraversal<T["right"]>]
+  : [];
+
+type a = InorderTraversal<typeof tree4>;
