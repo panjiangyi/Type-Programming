@@ -44,3 +44,13 @@ export type CreateArray<
   T extends number,
   Arr extends Array<unknown> = []
 > = Arr["length"] extends T ? Arr : CreateArray<T, ["", ...Arr]>;
+
+export type InArray<T, U> = U extends Array<unknown>
+  ? U extends [infer F, ...infer Rest]
+    ? Equal<F, T> extends true
+      ? true
+      : InArray<T, Rest>
+    : false
+  : [T] extends [U]
+  ? true
+  : false;
