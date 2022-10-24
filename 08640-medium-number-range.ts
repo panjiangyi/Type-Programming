@@ -151,27 +151,42 @@ type cases = [
 ];
 
 // ============= Your Code Here =============
-type GreaterThan<
+type GreaterEqualThan<
   T extends number,
   U extends number,
   Arr extends Array<1> = []
-> = Arr["length"] extends T
+> = T extends U
+  ? true
+  : Arr["length"] extends T
   ? false
   : Arr["length"] extends U
   ? true
-  : GreaterThan<T, U, [1, ...Arr]>;
+  : GreaterEqualThan<T, U, [1, ...Arr]>;
 
-type NumberRange<
+type _NumberRange<
   L extends number,
   H,
   Arr extends Array<number> = []
 > = Arr["length"] extends H
   ? [...Arr, Arr["length"]]
-  : NumberRange<L, H, [...Arr, Arr["length"]]>;
-type ShiftBy<T, N extends number, R extends unknown[] = []> = T extends [
-  infer F,
-  ...infer Rest
-]
-  ? ShiftBy<Rest, N, [F, ...R]>
-  : T;
-type a = ShiftBy<[1, 2, 3, 4, 5], 3>;
+  : _NumberRange<L, H, [...Arr, Arr["length"]]>;
+
+type ShiftBy<
+  T,
+  N extends number,
+  R extends unknown[] = [],
+  Count extends unknown[] = []
+> = T extends [infer F, ...infer Rest]
+  ? ShiftBy<
+      Rest,
+      N,
+      [...R, ...(GreaterEqualThan<Count["length"], N> extends true ? [F] : [])],
+      [1, ...Count]
+    >
+  : R;
+
+type NumberRange<
+  L extends number,
+  H,
+  R extends unknown[] = ShiftBy<_NumberRange<L, H>, L>
+> = R[number];
